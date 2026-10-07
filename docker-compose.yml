@@ -1,0 +1,29 @@
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: devflow-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: devflow_db
+      MYSQL_USER: devflow
+      MYSQL_PASSWORD: devflow123
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: devflow-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/devflow_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: devflow
+      SPRING_DATASOURCE_PASSWORD: devflow123
+    depends_on:
+      mysqldb:
+        condition: service_healthy
