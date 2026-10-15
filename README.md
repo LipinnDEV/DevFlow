@@ -1,6 +1,6 @@
 # DevFlow
 
-> Plataforma de gerenciamento de projetos para desenvolvedores e equipes — API REST em **Java 21 + Spring Boot**.
+> Um projeto de portfólio feito para organizar projetos e tarefas de desenvolvimento, usando **Java 21 + Spring Boot**.
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-brightgreen)
@@ -8,18 +8,15 @@
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-## Descrição
+## Sobre o projeto
 
-O **DevFlow** permite que usuários criem projetos, convidem membros, organizem tarefas em um fluxo
-(`TODO → EM_ANDAMENTO → EM_REVISAO → CONCLUIDA`), conversem por comentários, acompanhem o progresso
-em tempo real e consultem um histórico completo de atividades. Um dashboard resume projetos, tarefas
-atrasadas e produtividade da equipe.
+O **DevFlow** nasceu como um projeto de portfólio para colocar em prática conceitos de desenvolvimento de APIs com Java e Spring Boot. A ideia é reunir, em um só lugar, recursos que ajudam uma equipe a organizar projetos, dividir tarefas, trocar comentários e acompanhar o andamento do trabalho.
+
+As tarefas passam por etapas como `TODO`, `EM_ANDAMENTO`, `EM_REVISAO` e `CONCLUIDA`. O sistema também mantém um histórico de atividades e apresenta estatísticas para facilitar o acompanhamento dos projetos.
 
 ## Objetivo
 
-Projeto de portfólio criado para praticar e demonstrar, de ponta a ponta, o desenvolvimento de uma API
-profissional: autenticação com JWT, autorização por papéis e por recurso, regras de negócio reais (não
-apenas CRUD), modelagem relacional, testes automatizados e empacotamento com Docker.
+O principal objetivo é aprender construindo: aplicar os conceitos estudados em um projeto mais completo, desde a modelagem do banco de dados até a criação, segurança, documentação e testes da API. Além das operações básicas de cadastro, o DevFlow trabalha com regras de negócio e controle de acesso, aproximando o projeto de situações que podem aparecer em aplicações reais.
 
 ## Funcionalidades
 
@@ -32,7 +29,9 @@ apenas CRUD), modelagem relacional, testes automatizados e empacotamento com Doc
 - **Dashboard**: totais de projetos e tarefas, tarefas atrasadas, tarefas por prioridade e status, produtividade por usuário.
 - **Administração**: listar, ativar e desativar usuários (somente `ADMIN`).
 
-### Regras de negócio implementadas
+### Algumas regras de negócio
+
+Além das funcionalidades principais, o projeto inclui regras para manter os dados consistentes e evitar ações sem permissão:
 
 | Regra | Onde está |
 |---|---|
@@ -381,17 +380,19 @@ mvn test
 
 Os testes de integração usam o perfil `test` (H2 em memória) — não precisam de MySQL nem de Docker.
 
-## Decisões de projeto
+## Algumas escolhas técnicas
 
-- **DTOs como `record`**: imutáveis, concisos e com validação declarativa.
-- **Mappers manuais**: para um projeto de aprendizado, é mais claro ver a conversão do que esconder em uma biblioteca.
-- **Specifications** nas listagens: filtros opcionais combináveis sem escrever uma query para cada combinação.
-- **Permissões centralizadas** em `ProjectAccessService`: a mesma regra vale em projetos, tarefas, comentários e atividades.
-- **Exclusão lógica de usuários**: preserva o histórico e a integridade dos dados.
-- **Atividades registradas dentro da mesma transação** da operação: se a operação falhar, nada fica registrado.
-- **422 para regras de negócio** e **400 para dados malformados**: o cliente diferencia "requisição inválida" de "regra violada".
+Durante o desenvolvimento, algumas decisões ajudam a manter o código organizado e mais fácil de entender:
 
-## Conhecimentos de programação utilizados
+- **DTOs com `record`** para representar os dados recebidos e devolvidos pela API.
+- **Mappers manuais** para deixar explícita a conversão entre entidades e DTOs.
+- **Specifications** para combinar filtros nas listagens.
+- **Permissões centralizadas** em `ProjectAccessService`, evitando repetir as mesmas verificações em vários lugares.
+- **Desativação de usuários em vez de exclusão definitiva**, preservando o histórico.
+- **Registro de atividades na mesma transação** da operação relacionada.
+- **Respostas HTTP específicas** para diferenciar dados inválidos de regras de negócio não atendidas.
+
+## O que pratiquei neste projeto
 
 - **Java moderno**: `record`s, `switch`/pattern matching com `instanceof`, text blocks, Streams e `Optional`.
 - **Orientação a objetos**: encapsulamento, enums com regras, composição, injeção de dependência.
@@ -404,9 +405,9 @@ Os testes de integração usam o perfil `test` (H2 em memória) — não precisa
 - **Validação de dados**: Bean Validation (`@NotBlank`, `@Email`, `@Size`, `@Pattern`) + validações de regra de negócio.
 - **Testes automatizados**: unitários com mocks, testes de integração, `ArgumentCaptor`, testes parametrizados.
 - **DevOps**: Dockerfile multi-stage, Docker Compose com healthcheck, configuração por variáveis de ambiente e `.env.example`.
-- **Git/GitHub**: `.gitignore`, segredos fora do repositório, README profissional.
+- **Git e GitHub**: organização do repositório, uso de `.gitignore` e documentação do projeto.
 
-## Possíveis melhorias futuras
+## Ideias para próximas versões
 
 - Migrações de banco com **Flyway** (substituindo `ddl-auto=update`).
 - **Refresh token** e logout com revogação de tokens.
@@ -420,4 +421,4 @@ Os testes de integração usam o perfil `test` (H2 em memória) — não precisa
 
 ## Licença
 
-Distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE).
+Este projeto é distribuído sob a licença MIT. Para mais detalhes, consulte o arquivo [LICENSE](LICENSE).
