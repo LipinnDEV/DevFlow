@@ -1,0 +1,21 @@
+package com.devflow.enums;
+
+/** Tipos de eventos registrados no histórico de atividades. */
+public enum ActivityType {
+    USUARIO_REGISTRADO,
+    USUARIO_ATIVADO,
+    USUARIO_DESATIVADO,
+    PROJETO_CRIADO,
+    PROJETO_ATUALIZADO,
+    PROJETO_EXCLUIDO,
+    PROJETO_CONCLUIDO,
+    MEMBRO_ADICIONADO,
+    MEMBRO_REMOVIDO,
+    PROPRIETARIO_ALTERADO,
+    TAREFA_CRIADA,
+    TAREFA_ATUALIZADA,
+    TAREFA_EXCLUIDA,
+    STATUS_ALTERADO,
+    TAREFA_CONCLUIDA,
+    COMENTARIO_CRIADO
+}

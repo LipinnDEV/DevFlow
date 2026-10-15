@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: devflow-api
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/devflow?createDatabaseIfNotExist=true&serverTimezone=America/Sao_Paulo&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      # "update" facilita o desenvolvimento. Em produção, prefira migrações (Flyway/Liquibase).
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 50
+
+server:
+  port: ${SERVER_PORT:8080}
+
+app:
+  jwt:
+    # Mínimo de 32 caracteres. Este valor é SOMENTE para desenvolvimento local.
+    # Em produção/Docker ele vem da variável de ambiente JWT_SECRET (.env).
+    secret: ${JWT_SECRET:dev-only-secret-change-me-dev-only-secret-change-me}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+  admin:
+    # Se e-mail e senha forem informados, um administrador é criado na primeira execução.
+    name: ${ADMIN_NAME:Administrador}
+    email: ${ADMIN_EMAIL:}
+    password: ${ADMIN_PASSWORD:}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+logging:
+  level:
+    com.devflow: INFO
