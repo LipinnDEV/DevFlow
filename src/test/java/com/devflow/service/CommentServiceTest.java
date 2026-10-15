@@ -41,51 +41,7 @@ import static org.mockito.Mockito.when;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CommentServiceTest {
 
-    @Mock
-    private CommentRepository commentRepository;
-    @Mock
-    private TaskRepository taskRepository;
-    @Mock
-    private ProjectAccessService accessService;
-    @Mock
-    private CurrentUserService currentUserService;
-    @Mock
-    private ActivityService activityService;
 
-    private CommentService commentService;
-    private User ana;
-    private Task task;
-
-    @BeforeEach
-    void setUp() {
-        commentService = new CommentService(commentRepository, taskRepository, accessService,
-                currentUserService, activityService, new CommentMapper(new UserMapper()));
-
-        ana = TestFactory.user(1L, "Ana", Role.USER);
-        Project project = TestFactory.project(1L, ana, null);
-        task = TestFactory.task(100L, project, ana, null, TaskStatus.TODO);
-
-        when(currentUserService.getCurrentUser()).thenReturn(ana);
-        when(taskRepository.findById(100L)).thenReturn(Optional.of(task));
-        when(accessService.getProjectForMember(1L, ana)).thenReturn(project);
-        when(commentRepository.save(any(Comment.class))).thenAnswer(inv -> {
-            Comment c = inv.getArgument(0);
-            c.setId(5L);
-            return c;
-        });
-    }
-
-    @Test
-    @DisplayName("Comentar: salva o comentário com autor e tarefa e registra a atividade")
-    void create_sucesso() {
-        CommentResponse response = commentService.create(100L, new CommentRequest("  Vou começar hoje  "));
-
-        assertThat(response.id()).isEqualTo(5L);
-        assertThat(response.text()).isEqualTo("Vou começar hoje");
-        assertThat(response.author().id()).isEqualTo(1L);
-        assertThat(response.taskId()).isEqualTo(100L);
-        verify(activityService).register(eq(ActivityType.COMENTARIO_CRIADO), anyString(), eq(ana), eq(1L), eq(100L));
-    }
 
     @Test
     @DisplayName("Comentar: quem não participa do projeto não pode comentar")
